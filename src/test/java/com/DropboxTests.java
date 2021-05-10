@@ -19,7 +19,7 @@ import static org.junit.Assert.assertEquals;
 public class DropboxTests {
 
     private static final String TOKEN =
-            "sl.AwnIMh2AU_Q-ISMSR5o-NZvv0S_ChZHVs2tvyEwAyv2mgphZKtdy4lxP2dXG13LLT_sLW52KKWtLfmUq4V4jRorjTNlOyAyZX04XYwLDLaJBUfoT48kc0OqbxT_-I-HLgvcBw0ztNs3x";
+            "XNyJqELY0zIAAAAAAAAAAWgqLSKhElTdQPfKs2sufdL_2oMazockDUcC2elUBWKR";
     private static final String UPLOAD_FILE_PATH = "com/testdata.txt";
     private static final String DROPBOX_FILE_PATH = "/testdata.txt";
 
