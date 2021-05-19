@@ -2,6 +2,7 @@ package com;
 
 import io.restassured.RestAssured;
 import io.restassured.response.Response;
+import io.restassured.response.ValidatableResponse;
 import org.json.simple.JSONObject;
 import org.junit.Test;
 import org.junit.jupiter.api.MethodOrderer;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 
 import static io.restassured.RestAssured.given;
 import static io.restassured.config.EncoderConfig.encoderConfig;
-import static org.junit.Assert.assertEquals;
 
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class DropboxTests {
@@ -27,7 +27,7 @@ public class DropboxTests {
     @Order(1)
     public void uploadFile() {
         File data = new File(getClass().getClassLoader().getResource(UPLOAD_FILE_PATH).getFile());
-        Response response = given().
+        ValidatableResponse response = given().
                 config(RestAssured.config().encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false))).
                 header("Authorization", "Bearer " + TOKEN).
                 header("Dropbox-API-Arg",
@@ -38,8 +38,8 @@ public class DropboxTests {
                                 "\"strict_conflict\": false}").
                 header("Content-Type", "application/octet-stream").
                 body(data).
-                when().post("https://content.dropboxapi.com/2/files/upload");
-        assertEquals(200, response.getStatusCode());
+                when().post("https://content.dropboxapi.com/2/files/upload")
+                .then().statusCode(200);
     }
 
     @Test
@@ -63,15 +63,15 @@ public class DropboxTests {
         JSONObject requestBody = new JSONObject();
         requestBody.put("file", fileId);
         requestBody.put("actions", new ArrayList());
-        Response response = RestAssured.given().
+        ValidatableResponse response = RestAssured.given().
                 config(RestAssured.config().
                         encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false))).
                 header("Authorization", "Bearer " + TOKEN).
                 header("Content-Type", "application/json").
                 body(requestBody.toJSONString()).
                 when().
-                post("https://api.dropboxapi.com/2/sharing/get_file_metadata");
-        assertEquals(200, response.getStatusCode());
+                post("https://api.dropboxapi.com/2/sharing/get_file_metadata")
+                .then().statusCode(200);
     }
 
     @Test
@@ -79,14 +79,14 @@ public class DropboxTests {
     public void deleteFile() {
         JSONObject requestBody = new JSONObject();
         requestBody.put("path", DROPBOX_FILE_PATH);
-        Response response = given().
+        ValidatableResponse response = given().
                 config(RestAssured.config().
                         encoderConfig(encoderConfig().appendDefaultContentCharsetToContentTypeIfUndefined(false))).
                 header("Authorization", "Bearer " + TOKEN).
                 header("Content-Type", "application/json").
                 body(requestBody.toJSONString()).
                 when().
-                post("https://api.dropboxapi.com/2/files/delete_v2");
-        assertEquals(200, response.getStatusCode());
+                post("https://api.dropboxapi.com/2/files/delete_v2")
+                .then().statusCode(200);
     }
 }
